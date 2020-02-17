@@ -8,7 +8,9 @@ import sys
 # Homework 4: Part 1
 
 # Testing the timing differences between threads and processes
-# Source code taken from https://stackoverflow.com/questions/3044580/multiprocessing-vs-threading-python by Ciro Santilli
+# Source code taken from https://stackoverflow.com/questions/3044580/
+#   multiprocessing-vs-threading-python by Ciro Santilli
+
 
 def cpu_func(result, niters):
     '''
@@ -18,37 +20,46 @@ def cpu_func(result, niters):
         result = (result * result * i + 2 * result * i * i + 3) % 10000000
     return result
 
+
 class CpuThread(threading.Thread):
     def __init__(self, niters):
         super().__init__()
-        self.niters = nitersa
+        self.niters = niters
         self.result = 1
+
     def run(self):
         self.result = cpu_func(self.result, self.niters)
+
 
 class CpuProcess(multiprocessing.Process):
     def __init__(self, niters):
         super().__init__()
         self.niters = niters
         self.result = 1
+
     def run(self):
         self.result = cpu_func(self.result, self.niters)
+
 
 class IoThread(threading.Thread):
     def __init__(self, sleep):
         super().__init__()
         self.sleep = sleep
         self.result = self.sleep
+
     def run(self):
         time.sleep(self.sleep)
+
 
 class IoProcess(multiprocessing.Process):
     def __init__(self, sleep):
         super().__init__()
         self.sleep = sleep
         self.result = self.sleep
+
     def run(self):
         time.sleep(self.sleep)
+
 
 if __name__ == '__main__':
     cpu_n_iters = int(sys.argv[1])

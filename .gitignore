@@ -1,2 +1,11 @@
 # Ignore virtual environment
 /venv
+
+# Ignore vscode setup
+/.vscode
+
+# Ignore config file containing sensitive information
+config.cfg
+
+# Ignore __pycache__ files
+/__pycache__

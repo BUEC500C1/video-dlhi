@@ -1,38 +1,38 @@
+import os
 import ffmpeg
 from PIL import Image
 from io import BytesIO
 from textwrap import wrap
-from twitter import get_tweets
+from twitter import get_tweets, get_image
 
 
 # Resize image to predetermined size
-def resize_image(image):
-    baseheight = 400
+def resize_image(num_images, url, handle, position):
+    img = get_image(url)
 
-    img = Image.open(image)
-    hpercent = (baseheight / float(img.size[1]))
-    wsize = int((float(img.size[0]) * float(hpercent)))
-    img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+    basewidth = 350
 
-    temp = BytesIO()
-    img.save(temp, format="jpeg")
+    img = Image.open(BytesIO(img))
+    wpercent = (basewidth / float(img.size[0]))
+    hsize = int((float(img.size[1]) * float(wpercent)))
+    img = img.resize((basewidth, hsize), Image.ANTIALIAS)
 
-    return temp
+    img.save(f'img/{handle}-{position}.jpeg', format="jpeg")
+
+    return f'img/{handle}-{position}.jpeg'
 
 
-def create_single_tweet(position, handle, tweet):
+def create_single_tweet(pos, handle, tweet):
     stream = ffmpeg.input(
         'img/white.jpg',
         pattern_type='glob',
         framerate=1
     )
 
-    print(tweet.get_profile_pic())
-
     stream = ffmpeg.overlay(
         stream,
         ffmpeg.input(tweet.profile_pic),
-        x=200,
+        x=100,
         y=75
     )
 
@@ -44,7 +44,7 @@ def create_single_tweet(position, handle, tweet):
         box=1,
         boxborderw=15,
         escape_text=True,
-        x=300,
+        x=200,
         y=50
     )
 
@@ -56,10 +56,25 @@ def create_single_tweet(position, handle, tweet):
         box=1,
         boxborderw=15,
         escape_text=True,
-        x=300, y=100
+        x=200, y=100
+    )
+
+    stream = ffmpeg.drawtext(
+        stream,
+        text=tweet.time_stamp,
+        font="fonts/OpenSansEmoji.ttf",
+        fontsize=25,
+        box=1,
+        boxborderw=15,
+        escape_text=True,
+        x=1200,
+        y=50
     )
 
     wrapped_tweet = wrap(tweet.text, 50)
+
+    # The y value where the text begins
+    vertical_y = 200
 
     for i, line in enumerate(wrapped_tweet):
         stream = ffmpeg.drawtext(
@@ -70,11 +85,41 @@ def create_single_tweet(position, handle, tweet):
             box=1,
             boxborderw=15,
             escape_text=True,
-            x=300,
-            y=200 + (50 * i)
+            x=200,
+            y=200+(50 * i)
         )
+        # Remember the offset for each new line of text
+        vertical_y = vertical_y + (50 * (i + 1))
 
-    stream = ffmpeg.output(stream, f'videos/{handle}-{position}.mp4')
+    num_images = len(tweet.images)
+
+    if num_images != 0:
+        for position in range(0, num_images):
+            # resize the image and return the location
+            # The order of images depebds on the number of images
+            url = resize_image(num_images, tweet.images[position],
+                               handle, position)
+
+            if position < 2:
+                stream = ffmpeg.overlay(
+                    stream,
+                    ffmpeg.input(url),
+                    x=200 + (position * 400),
+                    # Incorporate the offset and start below the final
+                    # line of text
+                    y=vertical_y
+                )
+            else:
+                stream = ffmpeg.overlay(
+                    stream,
+                    ffmpeg.input(url),
+                    x=200 + ((position - 2) * 400),
+                    # Start another row of pictures
+                    y=vertical_y + 300
+                )
+
+    stream = ffmpeg.output(stream, f'videos/{handle}-{pos}.mp4',
+                           loglevel='panic')
     ffmpeg.run(stream)
 
 
@@ -85,33 +130,43 @@ def generate_indiv_slides(handle):
     num_tweets = len(tweets)
 
     # Generate videos for individual tweets
-    for position in range(0, 3):
+    for position in range(0, num_tweets):
         create_single_tweet(position, handle, tweets[position])
 
+    return num_tweets
 
-def create_video(handle):
+
+def tweets_to_video(handle, num_tweets):
     all_tweets = []
     # Create a 'slide' of each tweet and store inside dir video
-    for position in range(0, 3):
-        all_tweets.append(ffmpeg.input(f'videos/{handle}-{position}.mp4'))
+    for p in range(0, num_tweets):
+        all_tweets.append(ffmpeg.input(f'videos/{handle}-{p}.mp4'))
+        print(p)
+
+    print(len(all_tweets))
+
+    for i in all_tweets:
+        print(i)
 
     stream = ffmpeg.concat(*all_tweets)
-    # stream = ffmpeg.overlay(stream, ffmpeg.input(profile_pic))
-    # stream = ffmpeg.drawbox(stream, 0, 0, 400, 400, color='black', thickness=10)
-    stream = ffmpeg.output(stream, f'videos/{handle}.mp4')
+    stream = ffmpeg.output(stream, f'videos/{handle}.mp4', loglevel='panic')
     ffmpeg.run(stream)
 
-    # (
-    #     ffmpeg
-    #     .concat(*all_tweets)
-    #     #.overlay(ffmpeg.input(status[0]._json["user"]["profile_image_url_https"][:-11] + ".jpg"))
-    #     #.drawbox(0, 0, 400, 400, color='black', thickness=10)
-    #     .output(f'videos/{handle}.mp4')
-    #     .run()
-    # )
+
+def create_video(user):
+    num_tweets = generate_indiv_slides(user)
+    tweets_to_video(user, num_tweets)
+
+    # Clean up files
+    for i in range(0, num_tweets):
+        try:
+            os.remove(f"img/{user}-{i}.jpeg")
+        except FileNotFoundError:
+            print("No more image files")
+
+        os.remove(f"videos/{user}-{i}.mp4")
 
 
 if __name__ == '__main__':
     print("Main function!")
-    generate_indiv_slides('DavidLi19628923')
-    # create_video('DavidLi19628923')
+    create_video('michelleobama')

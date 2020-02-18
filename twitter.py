@@ -31,7 +31,7 @@ class Twitter():
         if 'media' in tweet.entities:
             for media in tweet.extended_entities['media']:
                 if media.get("type", None) == "photo":
-                    self.images.append({"image": media["media_url"]})
+                    self.images.append(media["media_url"])
 
     def get_profile_pic(self):
         return self.profile_pic
@@ -70,7 +70,7 @@ def get_image(url):
 
 if __name__ == '__main__':
     print("Main function")
-    tweets = get_tweets('michelleobama')
+    tweets = get_tweets('DavidLi19628923')
     example_tweet = tweets[0]
     '''
     print(f"name: {example_tweet.name}\nusername: {example_tweet.username}\n\
@@ -79,3 +79,4 @@ if __name__ == '__main__':
           images: {example_tweet.images}")
     '''
     print(example_tweet.get_profile_pic())
+    print(example_tweet.get_images())

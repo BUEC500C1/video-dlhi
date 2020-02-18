@@ -33,6 +33,12 @@ class Twitter():
                 if media.get("type", None) == "photo":
                     self.images.append({"image": media["media_url"]})
 
+    def get_profile_pic(self):
+        return self.profile_pic
+
+    def get_images(self):
+        return self.images
+
     def __repr__(self):
         return f'{{"user": {self.username}, "text": {self.text},\
              "media": {self.images}}}'
@@ -66,7 +72,10 @@ if __name__ == '__main__':
     print("Main function")
     tweets = get_tweets('michelleobama')
     example_tweet = tweets[0]
+    '''
     print(f"name: {example_tweet.name}\nusername: {example_tweet.username}\n\
           time: {example_tweet.time_stamp}\ntext: {example_tweet.text}\n\
           profile_pic: {example_tweet.profile_pic}\n\
           images: {example_tweet.images}")
+    '''
+    print(example_tweet.get_profile_pic())

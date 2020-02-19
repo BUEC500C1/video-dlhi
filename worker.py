@@ -6,7 +6,7 @@ workerQ = queue.Queue()
 
 
 def workerDispatcher():
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=1) as executor:
         while True:
             username, unique_code = workerQ.get()
             print(f"Processing Video for handle user {username} . . .")

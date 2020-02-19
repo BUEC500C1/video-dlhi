@@ -5,9 +5,9 @@ from webargs import fields
 from webargs.flaskparser import use_args
 
 from twitter import get_tweets, get_num_followers
-from ffmpeg_converter import removeVideo
 
 import uuid
+from ffmpeg_converter import removeVideo, uuid_keys
 from worker import workerQ
 
 
@@ -32,15 +32,34 @@ class CreateTweetVideo(Resource):
         username = args["handle"]
         unique_code = uuid.uuid4().hex
         workerQ.put((username, unique_code))
+        uuid_keys.append(unique_code)
+        print("Added KEY: ", uuid_keys)
         # create_video(username)
         return f'Video for user {username} started! UUID: {unique_code}'
+
+
+class getStatus(Resource):
+    @use_args({"uuid": fields.Str(required=True)})
+    def get(self, args):
+        uuid = args["uuid"]
+        if uuid in uuid_keys:
+            return "Not done, please wait"
+        else:
+            return "Finished!"
 
 
 class SendTweetVideo(Resource):
     @use_args({"uuid": fields.Str(required=True)})
     def get(self, args):
         uuid = args["uuid"]
-        video = send_file(f'videos/{uuid}.mp4',
-                          attachment_filename=f'{uuid}.mp4')
-        removeVideo(uuid)
-        return video
+        print(uuid_keys)
+        if uuid in uuid_keys:
+            return "Not done, please wait"
+        else:
+            try:
+                video = send_file(f'videos/{uuid}.mp4',
+                                  attachment_filename=f'{uuid}.mp4')
+                removeVideo(uuid)
+                return video
+            except FileNotFoundError:
+                return "File Not Found"

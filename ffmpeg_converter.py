@@ -5,6 +5,8 @@ from io import BytesIO
 from textwrap import wrap
 from twitter import get_tweets, get_image
 
+uuid_keys = []
+
 
 # Resize image to predetermined size
 def resize_image(num_images, url, unique_code, position):
@@ -165,9 +167,10 @@ def create_video(user, unique_code):
 
         os.remove(f"videos/{unique_code}-{i}.mp4")
 
+    uuid_keys.remove(unique_code)
+
 
 def removeVideo(unique_code):
-    print(unique_code)
     try:
         os.remove(f"videos/{unique_code}.mp4")
     except FileNotFoundError:

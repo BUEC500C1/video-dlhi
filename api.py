@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restful import Api
 
-from resources import LastTweet, NumFollowers, CreateTweetVideo, SendTweetVideo
+from resources import LastTweet, NumFollowers, CreateTweetVideo
+from resources import SendTweetVideo, getStatus
 
 from worker import workerDispatcher
 from threading import Thread
@@ -12,6 +13,7 @@ api = Api(app)
 api.add_resource(LastTweet, '/getLastTweet')
 api.add_resource(NumFollowers, "/getNumFollowers")
 api.add_resource(CreateTweetVideo, "/createVideo")
+api.add_resource(getStatus, "/getStatus")
 api.add_resource(SendTweetVideo, "/getVideo")
 
 workerDispatcherThread = Thread(target=workerDispatcher, daemon=True)

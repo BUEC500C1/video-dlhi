@@ -40,15 +40,16 @@ class Twitter():
         return self.images
 
     def __repr__(self):
-        return f'{{"user": {self.username}, "text": {self.text},\
-             "media": {self.images}}}'
+        return f'{{"name": {self.name}, "user": {self.username}, \
+            "text": {self.text}, "media": {self.images}}}'
 
     def __str__(self):
         return f"{self.time}: @{self.username} - \"{self.text}\" \
             -- Media: {self.images}"
 
     def to_json(self):
-        return {"user": self.username, "text": self.text, "media": self.images}
+        return {"name": self.name, "username": self.username,
+                "text": self.text, "media": self.images}
 
 
 def get_tweets(username):

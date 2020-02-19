@@ -1,4 +1,8 @@
-from api import app
+import sys
+
+sys.path.insert(0, "./src")
+
+from api import app  # noqa: E402
 
 
 if __name__ == "__main__":

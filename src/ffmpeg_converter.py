@@ -19,14 +19,14 @@ def resize_image(num_images, url, unique_code, position):
     hsize = int((float(img.size[1]) * float(wpercent)))
     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
 
-    img.save(f'img/{unique_code}-{position}.jpeg', format="jpeg")
+    img.save(f'src/img/{unique_code}-{position}.jpeg', format="jpeg")
 
-    return f'img/{unique_code}-{position}.jpeg'
+    return f'src/img/{unique_code}-{position}.jpeg'
 
 
 def create_single_tweet(pos, handle, tweet, unique_code):
     stream = ffmpeg.input(
-        'img/white.jpg',
+        'src/img/white.jpg',
         pattern_type='glob',
         framerate=1
     )
@@ -41,7 +41,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.name,
-        font="fonts/OpenSansEmoji.ttf",
+        font="src/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -53,7 +53,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.username,
-        font="fonts/OpenSansEmoji.ttf",
+        font="src/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -64,7 +64,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.time_stamp,
-        font="fonts/OpenSansEmoji.ttf",
+        font="src/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -82,7 +82,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
         stream = ffmpeg.drawtext(
             stream,
             text=line,
-            fontfile="fonts/OpenSansEmoji.ttf",
+            fontfile="src/fonts/OpenSansEmoji.ttf",
             fontsize=28,
             box=1,
             boxborderw=15,
@@ -120,7 +120,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
                     y=vertical_y + 300
                 )
 
-    stream = ffmpeg.output(stream, f'videos/{unique_code}-{pos}.mp4',
+    stream = ffmpeg.output(stream, f'src/videos/{unique_code}-{pos}.mp4',
                            loglevel='panic')
     ffmpeg.run(stream)
 
@@ -145,11 +145,11 @@ def tweets_to_video(unique_code, num_tweets):
     all_tweets = []
     # Create a 'slide' of each tweet and store inside dir video
     for p in range(0, num_tweets):
-        all_tweets.append(ffmpeg.input(f'videos/{unique_code}-{p}.mp4'))
+        all_tweets.append(ffmpeg.input(f'src/videos/{unique_code}-{p}.mp4'))
 
     stream = ffmpeg.concat(*all_tweets)
     # stream = ffmpeg.overwrite_output(stream)
-    stream = ffmpeg.output(stream, f'videos/{unique_code}.mp4',
+    stream = ffmpeg.output(stream, f'src/videos/{unique_code}.mp4',
                            loglevel='panic')
     ffmpeg.run(stream)
 
@@ -161,18 +161,18 @@ def create_video(user, unique_code):
     # Clean up files
     for i in range(0, num_tweets):
         try:
-            os.remove(f"img/{unique_code}-{i}.jpeg")
+            os.remove(f"src/img/{unique_code}-{i}.jpeg")
         except FileNotFoundError:
             pass
 
-        os.remove(f"videos/{unique_code}-{i}.mp4")
+        os.remove(f"src/videos/{unique_code}-{i}.mp4")
 
     uuid_keys.remove(unique_code)
 
 
 def removeVideo(unique_code):
     try:
-        os.remove(f"videos/{unique_code}.mp4")
+        os.remove(f"src/videos/{unique_code}.mp4")
     except FileNotFoundError:
         print("Error removing generated file!")
 

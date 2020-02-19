@@ -52,7 +52,6 @@ class SendTweetVideo(Resource):
     @use_args({"uuid": fields.Str(required=True)})
     def get(self, args):
         uuid = args["uuid"]
-        print(uuid_keys)
         if uuid in uuid_keys:
             return "Not done, please wait"
         else:

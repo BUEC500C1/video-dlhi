@@ -71,13 +71,16 @@ def get_image(url):
 
 if __name__ == '__main__':
     print("Main function")
-    tweets = get_tweets('DavidLi19628923')
-    example_tweet = tweets[0]
+    tweets = get_tweets('michelleobama')
+    # tweets = get_tweets('DavidLi19628923')
+    # example_tweet = tweets[0]
     '''
     print(f"name: {example_tweet.name}\nusername: {example_tweet.username}\n\
           time: {example_tweet.time_stamp}\ntext: {example_tweet.text}\n\
           profile_pic: {example_tweet.profile_pic}\n\
           images: {example_tweet.images}")
     '''
-    print(example_tweet.get_profile_pic())
-    print(example_tweet.get_images())
+    for i in range(0, 4):
+        # print(tweets[i].get_profile_pic())
+        # print(tweets[i].get_images())
+        print(tweets[i].images)

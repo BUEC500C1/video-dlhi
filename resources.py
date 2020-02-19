@@ -33,14 +33,14 @@ class CreateTweetVideo(Resource):
         unique_code = uuid.uuid4().hex
         workerQ.put((username, unique_code))
         # create_video(username)
-        return f"Video for user {username} started! UUID: {unique_code}"
+        return f'Video for user {username} started! UUID: {unique_code}'
 
 
 class SendTweetVideo(Resource):
     @use_args({"uuid": fields.Str(required=True)})
     def get(self, args):
         uuid = args["uuid"]
-        video = send_file(f'./videos/{uuid}.mp4',
+        video = send_file(f'videos/{uuid}.mp4',
                           attachment_filename=f'{uuid}.mp4')
         removeVideo(uuid)
         return video

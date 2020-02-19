@@ -71,7 +71,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
         y=50
     )
 
-    wrapped_tweet = wrap(tweet.text, 50)
+    wrapped_tweet = wrap(tweet.text, 90)
 
     # The y value where the text begins
     vertical_y = 200
@@ -89,7 +89,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
             y=200+(50 * i)
         )
         # Remember the offset for each new line of text
-        vertical_y = vertical_y + (50 * (i + 1))
+        vertical_y = vertical_y + 50
 
     num_images = len(tweet.images)
 

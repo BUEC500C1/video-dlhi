@@ -15,3 +15,7 @@ def test_resize_image():
     with open('./tests/test_image_resized.jpeg', 'rb') as f:
         requested_image = f.read()
     assert requested_image == imgByteArr
+
+
+def test_create_single_tweet():
+    assert True

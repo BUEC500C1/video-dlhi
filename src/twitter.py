@@ -8,17 +8,21 @@ config = configparser.ConfigParser()
 
 thisfolder = os.path.dirname(os.path.abspath(__file__))
 
-config.read(thisfolder + "/../keys")
+try:
+    config.read(thisfolder + "/../keys")
 
-api_key = config.get('auth', 'consumer_key').strip()
-api_secret_key = config['auth']['consumer_secret']
-access_token = config['auth']['access_token']
-access_token_secret = config['auth']['access_secret']
+    api_key = config.get('auth', 'consumer_key').strip()
+    api_secret_key = config['auth']['consumer_secret']
+    access_token = config['auth']['access_token']
+    access_token_secret = config['auth']['access_secret']
 
-auth = tweepy.OAuthHandler(api_key, api_secret_key)
-auth.set_access_token(access_token, access_token_secret)
+    auth = tweepy.OAuthHandler(api_key, api_secret_key)
+    auth.set_access_token(access_token, access_token_secret)
 
-api = tweepy.API(auth)
+    api = tweepy.API(auth)
+
+except FileNotFoundError:
+    print("No Key file found!")
 
 
 class Twitter():

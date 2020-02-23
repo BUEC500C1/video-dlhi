@@ -1,6 +1,5 @@
 import os
 import tweepy
-import requests
 import configparser
 
 # Set up Twitter using credentials from a file named keys
@@ -41,9 +40,6 @@ class Twitter():
     def get_profile_pic(self):
         return self.profile_pic
 
-    def get_images(self):
-        return self.images
-
     def __repr__(self):
         return f'{{"name": {self.name}, "user": {self.username}, \
             "text": {self.text}, "media": {self.images}}}'
@@ -66,12 +62,6 @@ def get_tweets(username):
 def get_num_followers(username):
     user = api.get_user(username)
     return user.followers_count
-
-
-def get_image(url):
-    response = requests.get(url, stream=True)
-    image = response.content
-    return image
 
 
 if __name__ == '__main__':

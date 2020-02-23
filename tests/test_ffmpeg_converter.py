@@ -4,6 +4,14 @@ from io import BytesIO
 sys.path.append('../src')
 
 
+def test_get_image():
+    from ffmpeg_converter import get_image
+    image = get_image("https://d233bqaih2ivzn.cloudfront.net/100/640x360.jpg")
+    with open('./tests/test_image.jpg', 'rb') as f:
+        requested_image = f.read()
+    assert requested_image == image
+
+
 def test_resize_image():
     from ffmpeg_converter import resize_image
     url = "https://d233bqaih2ivzn.cloudfront.net/100/640x360.jpg"

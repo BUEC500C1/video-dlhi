@@ -1,11 +1,18 @@
 import os
 import ffmpeg
+import requests
 from PIL import Image
 from io import BytesIO
 from textwrap import wrap
-from twitter import get_tweets, get_image
+from twitter import get_tweets
 
 uuid_keys = []
+
+
+def get_image(url):
+    response = requests.get(url, stream=True)
+    image = response.content
+    return image
 
 
 # Resize image to predetermined size

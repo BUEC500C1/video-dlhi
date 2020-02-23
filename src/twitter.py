@@ -1,15 +1,20 @@
+import os
 import tweepy
 import requests
 import configparser
 
-# Set up Twitter using credentials from a Config file
+# Set up Twitter using credentials from a file named keys
+# This keys file should be stored in the base directory
 config = configparser.ConfigParser()
-config.read("config.cfg")
 
-api_key = config['DEFAULT']['api_key']
-api_secret_key = config['DEFAULT']['api_secret_key']
-access_token = config['DEFAULT']['access_token']
-access_token_secret = config['DEFAULT']['access_token_secret']
+thisfolder = os.path.dirname(os.path.abspath(__file__))
+
+config.read(thisfolder + "/../keys")
+
+api_key = config.get('auth', 'consumer_key').strip()
+api_secret_key = config['auth']['consumer_secret']
+access_token = config['auth']['access_token']
+access_token_secret = config['auth']['access_secret']
 
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
 auth.set_access_token(access_token, access_token_secret)

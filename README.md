@@ -1,13 +1,13 @@
 # HW4: FFmpeg
 
 ## Twitter Setup
-Create a Twitter Development Account to obtain 4 distinct keys. You will need to create a **config.cfg** file with the following content:
+Create a Twitter Development Account to obtain 4 distinct keys. You will need to create a **keys** file in the base directory with the following content:
 
 ```
-[DEFAULT]
+[auth]
 
-api_key = your_api_key
-api_secret_key = your_api_secret_key
+consumer_key = your_api_key
+consumer_secret = your_api_secret_key
 access_token = your_access_token
 access_token_secret = your_access_token_secret
 ```

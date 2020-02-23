@@ -177,6 +177,7 @@ def create_video(user, unique_code):
         os.remove(f"src/videos/{unique_code}-{i}.mp4")
 
     uuid_keys.remove(unique_code)
+    return "UUID Removed"
 
 
 def removeVideo(unique_code):

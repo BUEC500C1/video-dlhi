@@ -9,7 +9,7 @@ uuid_keys = []
 
 
 # Resize image to predetermined size
-def resize_image(num_images, url, unique_code, position):
+def resize_image(num_images, url, unique_code, position, return_type):
     img = get_image(url)
 
     basewidth = 350
@@ -21,6 +21,8 @@ def resize_image(num_images, url, unique_code, position):
 
     img.save(f'src/img/{unique_code}-{position}.jpeg', format="jpeg")
 
+    if return_type == "image":
+        return img
     return f'src/img/{unique_code}-{position}.jpeg'
 
 
@@ -100,7 +102,7 @@ def create_single_tweet(pos, handle, tweet, unique_code):
             # resize the image and return the location
             # The order of images depebds on the number of images
             url = resize_image(num_images, tweet.images[position],
-                               unique_code, position)
+                               unique_code, position, "link")
 
             if position < 2:
                 stream = ffmpeg.overlay(

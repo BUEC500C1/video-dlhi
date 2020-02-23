@@ -4,7 +4,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 from textwrap import wrap
-from twitter import get_tweets
+# from twitter import get_tweets
 
 uuid_keys = []
 

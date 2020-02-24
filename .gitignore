@@ -10,3 +10,4 @@ keys
 
 # Ignore __pycache__ files
 *__pycache__
+.pytest_cache

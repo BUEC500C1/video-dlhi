@@ -148,7 +148,7 @@ def generate_indiv_slides(handle, unique_code):
     # num_tweets = len(tweets)
 
     # Default number of tweets fetched to 3
-    num_tweets = 3
+    num_tweets = 3 if len(tweets) > 3 else len(tweets)
 
     # Generate videos for individual tweets
     for position in range(0, num_tweets):
@@ -161,7 +161,9 @@ def tweets_to_video(unique_code, num_tweets):
     all_tweets = []
     # Create a 'slide' of each tweet and store inside dir video
     for p in range(0, num_tweets):
-        all_tweets.append(ffmpeg.input(f'{parpath}/videos/{unique_code}-{p}.mp4'))
+        all_tweets.append(
+            ffmpeg.input(f'{parpath}/videos/{unique_code}-{p}.mp4')
+        )
 
     stream = ffmpeg.concat(*all_tweets)
     # stream = ffmpeg.overwrite_output(stream)

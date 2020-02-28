@@ -6,5 +6,4 @@ def current_dir(filename):
 
 
 def parent_dir(filename):
-    thisfolder = os.path.dirname(os.path.abspath(filename))
-    return os.path.dirname(thisfolder)
+    return os.path.dirname(current_dir(filename))

@@ -19,20 +19,13 @@ api = tweepy.API(auth)
 
 
 class Twitter():
-    def __init__(self, tweet):
-        self.name = tweet.user.name
-        self.username = "@" + tweet.user.screen_name
-        self.time_stamp = tweet.created_at
-        self.text = tweet.full_text
-        self.profile_pic = tweet.user.profile_image_url_https.replace('\
-            _normal', '')
-        self.images = []
-
-        # If there are any images, it will be in the entities extended section
-        if 'media' in tweet.entities:
-            for media in tweet.extended_entities['media']:
-                if media.get("type", None) == "photo":
-                    self.images.append(media["media_url"])
+    def __init__(self, name, username, time_stamp, text, profile_pic, images):
+        self.name = name
+        self.username = "@" + username
+        self.time_stamp = time_stamp
+        self.text = text
+        self.profile_pic = profile_pic
+        self.images = images
 
     def get_profile_pic(self):
         return self.profile_pic
@@ -52,7 +45,26 @@ class Twitter():
 
 def get_tweets(username):
     user_timeline = api.user_timeline(username, tweet_mode='extended')
-    tweets = [Twitter(tweet) for tweet in user_timeline]
+    tweets = []
+
+    for tweet in user_timeline:
+        name = tweet.user.name
+        username = "@" + tweet.user.screen_name
+        time_stamp = tweet.created_at
+        text = tweet.full_text
+        profile_pic = tweet.user.profile_image_url_https.replace('\
+        _normal', '')
+        images = []
+
+        # If there are any images, it will be in the entities extended section
+        if 'media' in tweet.entities:
+            for media in tweet.extended_entities['media']:
+                if media.get("type", None) == "photo":
+                    images.append(media["media_url"])
+
+        tweets.append(Twitter(name, username, time_stamp, 
+                              text, profile_pic, images))
+
     return tweets
 
 
@@ -64,6 +76,10 @@ def get_num_followers(username):
 if __name__ == '__main__':
     print("Main function")
     tweets = get_tweets('elonmusk')
+
+    example_tweet = tweets[0]
+    print(example_tweet.profile_pic)
+
     # tweets = get_tweets('DavidLi19628923')
     # example_tweet = tweets[0]
     '''
@@ -72,7 +88,3 @@ if __name__ == '__main__':
           profile_pic: {example_tweet.profile_pic}\n\
           images: {example_tweet.images}")
     '''
-    for i in range(0, 4):
-        # print(tweets[i].get_profile_pic())
-        # print(tweets[i].get_images())
-        print(tweets[i].images)

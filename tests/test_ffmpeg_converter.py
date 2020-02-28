@@ -2,7 +2,10 @@ import os
 import sys
 from io import BytesIO
 
-sys.path.append('../src')
+sys.path.append('./src')
+sys.path.append('../')
+
+from config import get_config_key  # noqa:E402
 
 
 def test_get_image():
@@ -29,8 +32,11 @@ def test_resize_image():
 
 
 # This test only works if keys file is in home directory
-# def test_create_single_tweet():
-#     from ffmpeg_converter import create_video, uuid_keys
-#     uuid_keys.append('testing')
-#     string = create_video('michelleobama', 'testing')
-#     assert string == "UUID Removed"
+def test_create_single_tweet():
+    if get_config_key('consumer_key') is None:
+        assert True
+    else:
+        from ffmpeg_converter import create_video, uuid_keys
+        uuid_keys.append('testing')
+        string = create_video('michelleobama', 'testing')
+        assert string == "UUID Removed"

@@ -1,4 +1,5 @@
 import sys
+from unittest.mock import MagicMock
 
 sys.path.append('./src')
 sys.path.append('../')
@@ -26,5 +27,5 @@ def test_get_tweets():
 
     # If key credential file exists, test get tweets function
     from twitter import get_tweets
-    num = get_tweets('michelleobama')
+    num = MagicMock(get_tweets('michelleobama'))
     assert num is not None

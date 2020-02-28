@@ -23,7 +23,7 @@ def get_image(url):
 
 
 # Resize image to predetermined size
-def resize_image(num_images, url, unique_code, position, return_type):
+def resize_image(url, unique_code, position, return_type):
     img = get_image(url)
 
     basewidth = 350
@@ -115,7 +115,7 @@ def create_single_tweet(pos, tweet, unique_code):
         for position in range(0, num_images):
             # resize the image and return the location
             # The order of images depebds on the number of images
-            url = resize_image(num_images, tweet.images[position],
+            url = resize_image(tweet.images[position],
                                unique_code, position, "link")
 
             if position < 2:

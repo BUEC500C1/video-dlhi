@@ -63,7 +63,7 @@ def get_num_followers(username):
 
 if __name__ == '__main__':
     print("Main function")
-    tweets = get_tweets('michelleobama')
+    tweets = get_tweets('elonmusk')
     # tweets = get_tweets('DavidLi19628923')
     # example_tweet = tweets[0]
     '''

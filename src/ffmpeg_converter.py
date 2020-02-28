@@ -5,6 +5,12 @@ from PIL import Image
 from io import BytesIO
 from textwrap import wrap
 from twitter import get_tweets
+from util import parent_dir
+
+
+# Store paths of current file and parent directory
+parpath = parent_dir(__file__)
+
 
 # Variable used to store names of videos to be removed
 uuid_keys = []
@@ -27,16 +33,16 @@ def resize_image(num_images, url, unique_code, position, return_type):
     hsize = int((float(img.size[1]) * float(wpercent)))
     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
 
-    img.save(f'src/img/{unique_code}-{position}.jpeg', format="jpeg")
+    img.save(f'{parpath}/img/{unique_code}-{position}.jpeg', format="jpeg")
 
     if return_type == "image":
         return img
-    return f'src/img/{unique_code}-{position}.jpeg'
+    return f'{parpath}/img/{unique_code}-{position}.jpeg'
 
 
 def create_single_tweet(pos, tweet, unique_code):
     stream = ffmpeg.input(
-        'src/img/white.jpg',
+        f'{parpath}/img/white.jpg',
         pattern_type='glob',
         framerate=1
     )
@@ -51,7 +57,7 @@ def create_single_tweet(pos, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.name,
-        font="src/fonts/OpenSansEmoji.ttf",
+        font=f"{parpath}/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -63,7 +69,7 @@ def create_single_tweet(pos, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.username,
-        font="src/fonts/OpenSansEmoji.ttf",
+        font=f"{parpath}/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -74,7 +80,7 @@ def create_single_tweet(pos, tweet, unique_code):
     stream = ffmpeg.drawtext(
         stream,
         text=tweet.time_stamp,
-        font="src/fonts/OpenSansEmoji.ttf",
+        font=f"{parpath}/fonts/OpenSansEmoji.ttf",
         fontsize=25,
         box=1,
         boxborderw=15,
@@ -92,7 +98,7 @@ def create_single_tweet(pos, tweet, unique_code):
         stream = ffmpeg.drawtext(
             stream,
             text=line,
-            fontfile="src/fonts/OpenSansEmoji.ttf",
+            fontfile=f"{parpath}/fonts/OpenSansEmoji.ttf",
             fontsize=28,
             box=1,
             boxborderw=15,
@@ -130,7 +136,7 @@ def create_single_tweet(pos, tweet, unique_code):
                     y=vertical_y + 300
                 )
 
-    stream = ffmpeg.output(stream, f'src/videos/{unique_code}-{pos}.mp4',
+    stream = ffmpeg.output(stream, f'{parpath}/videos/{unique_code}-{pos}.mp4',
                            loglevel='panic')
     ffmpeg.run(stream)
 
@@ -155,11 +161,11 @@ def tweets_to_video(unique_code, num_tweets):
     all_tweets = []
     # Create a 'slide' of each tweet and store inside dir video
     for p in range(0, num_tweets):
-        all_tweets.append(ffmpeg.input(f'src/videos/{unique_code}-{p}.mp4'))
+        all_tweets.append(ffmpeg.input(f'{parpath}/videos/{unique_code}-{p}.mp4'))
 
     stream = ffmpeg.concat(*all_tweets)
     # stream = ffmpeg.overwrite_output(stream)
-    stream = ffmpeg.output(stream, f'src/videos/{unique_code}.mp4',
+    stream = ffmpeg.output(stream, f'{parpath}/videos/{unique_code}.mp4',
                            loglevel='panic')
     ffmpeg.run(stream)
 
@@ -171,11 +177,11 @@ def create_video(user, unique_code):
     # Clean up files
     for i in range(0, num_tweets):
         try:
-            os.remove(f"src/img/{unique_code}-{i}.jpeg")
+            os.remove(f"{parpath}/img/{unique_code}-{i}.jpeg")
         except FileNotFoundError:
             pass
 
-        os.remove(f"src/videos/{unique_code}-{i}.mp4")
+        os.remove(f"{parpath}/videos/{unique_code}-{i}.mp4")
 
     uuid_keys.remove(unique_code)
     return "UUID Removed"
@@ -183,7 +189,7 @@ def create_video(user, unique_code):
 
 def removeVideo(unique_code):
     try:
-        os.remove(f"src/videos/{unique_code}.mp4")
+        os.remove(f"{parpath}/videos/{unique_code}.mp4")
     except FileNotFoundError:
         print("Error removing generated file!")
 

@@ -1,8 +1,9 @@
 import os
 import configparser
+from util import parent_dir
 
-thisfolder = os.path.dirname(os.path.abspath(__file__))
-parentfolder = os.path.dirname(thisfolder)
+
+parentfolder = parent_dir(__file__)
 
 
 def get_config_key(key, section='auth'):

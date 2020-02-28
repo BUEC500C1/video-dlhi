@@ -1,11 +1,11 @@
-import os
 import tweepy
 from config import get_config_key
+from util import current_dir
 
 # Set up Twitter using credentials from a file named keys
 # This keys file should be stored in the base directory
 
-thisfolder = os.path.dirname(os.path.abspath(__file__))
+thisfolder = current_dir(__file__)
 
 api_key = get_config_key('consumer_key')
 api_secret_key = get_config_key('consumer_secret')

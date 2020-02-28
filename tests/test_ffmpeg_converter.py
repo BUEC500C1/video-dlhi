@@ -24,7 +24,7 @@ def test_resize_image():
     with open('./tests/test_image_resized.jpeg', 'rb') as f:
         requested_image = f.read()
 
-    os.remove('./src/img/1-1.jpeg')
+    os.remove('./img/1-1.jpeg')
     assert requested_image == imgByteArr
 
 

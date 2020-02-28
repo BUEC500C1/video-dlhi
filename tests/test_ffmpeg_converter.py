@@ -1,3 +1,4 @@
+import os
 import sys
 from io import BytesIO
 
@@ -22,14 +23,14 @@ def test_resize_image():
 
     with open('./tests/test_image_resized.jpeg', 'rb') as f:
         requested_image = f.read()
+
+    os.remove('./src/img/1-1.jpeg')
     assert requested_image == imgByteArr
 
 
 # This test only works if keys file is in home directory
-'''
-def test_create_single_tweet():
-    from ffmpeg_converter import create_video, uuid_keys
-    uuid_keys.append('testing')
-    string = create_video('michelleobama', 'testing')
-    assert string == "UUID Removed"
-'''
+# def test_create_single_tweet():
+#     from ffmpeg_converter import create_video, uuid_keys
+#     uuid_keys.append('testing')
+#     string = create_video('michelleobama', 'testing')
+#     assert string == "UUID Removed"

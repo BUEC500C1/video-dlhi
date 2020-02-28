@@ -1,20 +1,16 @@
-import os
 import sys
-import configparser
 
 sys.path.append('./src')
 sys.path.append('../')
 
+from config import get_config_key  # noqa:E402
+
 
 def test_key_twitter_file():
     # Test if key file exists
-    thisfolder = os.path.dirname(os.path.abspath(__file__))
-    if os.path.isfile('keys') is False:
+    if get_config_key('consumer_key') is None:
         assert True
         return
-
-    config = configparser.ConfigParser()
-    config.read(thisfolder + "keys")
 
     # If key credential file exists, test twitter function
     from twitter import get_num_followers

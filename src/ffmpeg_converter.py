@@ -6,6 +6,7 @@ from io import BytesIO
 from textwrap import wrap
 from twitter import get_tweets
 
+# Variable used to store names of videos to be removed
 uuid_keys = []
 
 
@@ -33,7 +34,7 @@ def resize_image(num_images, url, unique_code, position, return_type):
     return f'src/img/{unique_code}-{position}.jpeg'
 
 
-def create_single_tweet(pos, handle, tweet, unique_code):
+def create_single_tweet(pos, tweet, unique_code):
     stream = ffmpeg.input(
         'src/img/white.jpg',
         pattern_type='glob',
@@ -145,7 +146,7 @@ def generate_indiv_slides(handle, unique_code):
 
     # Generate videos for individual tweets
     for position in range(0, num_tweets):
-        create_single_tweet(position, handle, tweets[position], unique_code)
+        create_single_tweet(position, tweets[position], unique_code)
 
     return num_tweets
 

@@ -63,5 +63,3 @@ curl http://127.0.0.1:5000/getVideo?uuid=6aa77ebfff1c46248755cf507dbbf857 --outp
 ```
 
 Note! When downloading the video, if you submit a **/getVideo** request without the --output flag, you will not be able to download your video again. You will have to resubmit another **/createVideo** request.
-
-## Answers
